@@ -73,7 +73,7 @@ registry = "git://mirrors.ustc.edu.cn/crates.io-index"
 
 ## 1.3 Hello World
 
-* 源码后缀名.rs
+* 源码后缀名 .rs
 * 行注释符号：//
 * 块注释符号：/**/
 * 默认情况下main函数是可执行程序的入口点。main无参数、无返回值
