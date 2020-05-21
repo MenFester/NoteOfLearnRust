@@ -32,7 +32,8 @@ fn main() {
     static G1: i32 = 3;
     println!("{}", G1);
     static mut G2: i32 = 4;
-    unsafe {    // 可变全局变量无论读写都必须使用unsafe修饰
+    unsafe {
+        // 可变全局变量无论读写都必须使用unsafe修饰
         G2 = 5;
         println!("{}", G2);
     }
