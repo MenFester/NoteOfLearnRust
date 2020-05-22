@@ -6,6 +6,10 @@ fn test(condition: bool) {
     }
 }
 
+fn arithmetic(m: i8, n: i8) {
+    println!("{}", m + n);    // 有溢出风险
+}
+
 fn main() {
     test(true);
 
@@ -37,4 +41,12 @@ fn main() {
         G2 = 5;
         println!("{}", G2);
     }
+
+    let x: i32 = 9;
+    println!("9 power 3 = {}", x.pow(3));
+    println!("9 power 4 = {}", 9_i32.pow(4));    // 直接对整型字面量调用函数
+
+    let m: i8 = 120;
+    let n: i8 = 120;
+    arithmetic(m, n);
 }
