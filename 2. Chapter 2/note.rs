@@ -25,6 +25,12 @@ fn default() -> Point3d {
     Point3d { x: 0, y: 0, z: 0 }
 }
 
+struct T1 {
+    v: i32,
+}
+
+struct T2(i32);
+
 fn main() {
     test(true);
 
@@ -98,8 +104,15 @@ fn main() {
     let point = Point3d {
         z: 1,
         x: 2,
-        ..origin    // 不覆盖已有的x、z
+        ..origin // 不覆盖已有的x、z
     };
     println!("origin at {} {} {}", origin.x, origin.y, origin.z);
     println!("potint at {} {} {}", point.x, point.y, point.z);
+
+    let v1 = T1 { v: 1 };
+    let v2 = T2(1);
+    let v3 = T2 { 0: 1 };
+    println!("{}", v1.v);
+    println!("{}", v2.0);
+    println!("{}", v3.0);
 }
