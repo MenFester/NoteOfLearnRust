@@ -7,7 +7,22 @@ fn test(condition: bool) {
 }
 
 fn arithmetic(m: i8, n: i8) {
-    println!("{}", m + n);    // 有溢出风险
+    println!("{}", m + n); // 有溢出风险
+}
+
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+struct Point3d {
+    x: i32,
+    y: i32,
+    z: i32,
+}
+
+fn default() -> Point3d {
+    Point3d { x: 0, y: 0, z: 0 }
 }
 
 fn main() {
@@ -44,9 +59,47 @@ fn main() {
 
     let x: i32 = 9;
     println!("9 power 3 = {}", x.pow(3));
-    println!("9 power 4 = {}", 9_i32.pow(4));    // 直接对整型字面量调用函数
+    println!("9 power 4 = {}", 9_i32.pow(4)); // 直接对整型字面量调用函数
 
     let m: i8 = 120;
     let n: i8 = 120;
-    arithmetic(m, n);
+    arithmetic(m, n); // rustc -O 后不报panic
+
+    let i = 100_i8;
+    println!("checked {:?}", i.checked_add(i));
+    println!("saturating {:?}", i.saturating_add(i));
+    println!("wrapping {:?}", i.wrapping_add(i));
+
+    let p = (1_i32, 2_i32);
+    let (a, b) = p;
+    let x = p.0;
+    let y = p.1;
+    println!("{} {} {} {}", a, b, x, y);
+
+    println!("size of i8 {}", std::mem::size_of::<i8>());
+    println!("size of char {}", std::mem::size_of::<char>());
+    println!("size of '()' {}", std::mem::size_of::<()>());
+
+    let p = Point { x: 0, y: 0 };
+    println!("Point is at {} {}", p.x, p.y);
+
+    let x = 10;
+    let y = 20;
+    let p = Point { x, y };
+    println!("Point is at {} {}", p.x, p.y);
+
+    let p = Point { x: 0, y: 0 };
+    let Point { x: px, y: py } = p;
+    println!("Point is at {} {}", px, py);
+    let Point { x, y } = p;
+    println!("Point is at {} {}", x, y);
+
+    let origin = Point3d { x: 5, ..default() };
+    let point = Point3d {
+        z: 1,
+        x: 2,
+        ..origin    // 不覆盖已有的x、z
+    };
+    println!("origin at {} {} {}", origin.x, origin.y, origin.z);
+    println!("potint at {} {} {}", point.x, point.y, point.z);
 }
