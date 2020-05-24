@@ -113,4 +113,3 @@
   * Rust标准库中有一个极其常用的enum类型Option<T>，由于它实在是太常用，标准库将Option以及它的成员Some、None 都加入到了Prelude中
   * Rust的enum实际上是一种代数类型系统(Algebraic Data Type， ADT)。enum内部的variant只是一个名字而已，我们可以把enum内部的variant当成一个函数使用
 * 类型递归定义：Rust里面的复合数据类型是允许递归定义的。比如struct里面嵌套同样的struct类型，但是直接嵌套是不行的。直接使用 类型递归定义的问题在于，当编译器计算递归定义的类型大小时实数范围无解。解决办法很简单，用指针间接引用就可以了，因为指针的大小是固定的
-* 
