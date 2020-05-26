@@ -27,6 +27,18 @@ fn test_inner() {
     println!("{}", t.0);
 }
 
+const fn cube(num: usize) -> usize {
+    num * num * num
+}
+
+fn fib(index: u32) -> u64 {
+    if index == 1 || index == 2 {
+        1
+    } else {
+        fib(index - 1) + fib(index - 2)
+    }
+}
+
 fn main() {
     let p = (1, 3);
     let func = add2;
@@ -44,6 +56,13 @@ fn main() {
     for arg in std::env::args() {
         println!("Arg: {}", arg);
     }
+
+    const DIM: usize = cube(2);    // 常量不能被类型推导
+    const ARR: [i32; DIM] = [0; DIM];    // 长度为DIM的i32数组
+    println!("{:?}", ARR);
+
+    let f8 = fib(8);
+    println!("{}", f8);
 
     std::process::exit(0);
 }
