@@ -47,6 +47,14 @@ impl Shape2 for dyn Round {
     }
 }
 
+struct T(i32);
+
+impl T {
+    fn func(this: &Self) {
+        println!("value {}", this.0)
+    }
+}
+
 fn main() {
     let c = Circle { radius: 2_f64 };
     println!("The area is {}", c.area1());
@@ -56,5 +64,8 @@ fn main() {
     println!("The area is {}", b.area2());
 
     let b2 = Box::new(Circle { radius: 4_f64 }) as Box<dyn Round>;
-    println!("The area is {}", b2.area3())
+    println!("The area is {}", b2.area3());
+
+    let x = T(42);
+    T::func(&x);
 }
