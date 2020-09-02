@@ -22,11 +22,11 @@
   * 次版本：做了向下兼容的功能性新增
   * 修订号：做了向下兼容的问题修正
 * Rust多渠道发布策略：
-  * nightly版本：每天在主版本上自动创建出来的版本，功能最多、更新最快、存在问题的可能性更大。新功能首先在这个版本上开启，供用户试用。nightly版本中使用试验性功能，必须手动开启feature gate：在项目入口文件中加` #![feature(...name...)] `
+  * nightly版本：每天在主版本上自动创建出来的版本，功能最多、更新最快、存在问题的可能性更大。新功能首先在这个版本上开启，供用户试用。nightly版本中使用试验性功能，必须手动开启feature gate：在项目入口文件中加` #![feature(...name...)] `。等到这个功能稳定，再用新版本编译器编译时，会告警这个feature gate是多余的
   * beta版本：每隔一段时间，将一些在nightly版本中验证过的功能开放给用户使用，可以看做stable版本的“预发布”
   * stable版本：正式版本，每隔6星期发布一个新版本。stable版本是保证向前兼容的
-* Rust语言每个相对复杂的新功能，都要经过RFC(Request For Comment)设计步骤。编写一份RFC，其中包括：功能的目的、详细设计方案、优缺点探讨等。RFC->Nightly->Beta->Stable
-* Rust的edition策略：有时某些新功能确实需要一定程度上破坏兼容性，为了最大化地减少这些变动给用户带来的影响，让Rust的兼容性保证是一个有时限的长度而不是永久。
+* Rust语言相对重大的设计，都要经过RFC(Request For Comment)设计步骤。所有大功能必须先写好设计文档，讲清楚设计的目标、实现方式、优缺点等。Rust语言每个相对复杂一点的新功能，都要经历：RFC->Nightly->Beta->Stable
+* Rust的edition策略：有时某些新功能确实需要一定程度上破坏兼容性，为了最大化地减少这些变动给用户带来的影响，让Rust的兼容性保证是一个有时限的长度而不是永久。兼容性破坏的改变会在下一个edition中给出编译告警，并在再下一个edition中给出编译错误
 
 ## 1.2 安装开发环境
 
@@ -46,7 +46,7 @@
     * ` rustup self uninstall `；卸载rust所有程序
     * ` rustup update `：更新工具链
     * ` rustup install nightly `：安装nightly版本的编译工具链
-    * ` rustup default nightly `：设置默认工具链是nightly版本
+    * ` rustup default nightly `：设置默认工具链是nightly版本，可以在stable、default、nightly渠道中切换
 * 中国科技大学代理服务：
   * 网址：<https://lug.ustc.edu.cn/wiki/mirrors/help/rust-static>
   * 建议国内用户设置好环境变量后再使用rustup：
@@ -71,13 +71,23 @@ registry = "git://mirrors.ustc.edu.cn/crates.io-index"
     * rustup component add rust-analysis --toolchain nightly
     * rustup component add rust-src --toolchain nightly
 
+* 工具的简明使用帮助
+  * rustc -h，查看rustc的基本用法
+  * cargo -h，查看cargo的基本用法
+  * rustc -C help，查看rustc的一些跟代码生成相关的选项
+  * rustc -W help，查看rustc的一些跟代码告警相关的选项
+  * rustc -Z help，查看rustc的一些跟编译器内部实现相关的选项
+  * rustc -help -V，查看rustc的更详细的选项说明
+
 ## 1.3 Hello World
 
 * 源码后缀名 .rs
 * 行注释符号：//
 * 块注释符号：/**/
+* Rust设计者比较偏向使用单词缩写，即使是关键字也不例外，这只是个审美偏好而已
 * 默认情况下main函数是可执行程序的入口点。main无参数、无返回值
 * 局部变量声明使用let关键字
+* 字符串常量用双引号包含起来
 * 每条语句使用分号结尾
 * 语句块使用大括号
 * 空格、换行、缩进不是语法规则的一部分
@@ -90,11 +100,11 @@ registry = "git://mirrors.ustc.edu.cn/crates.io-index"
   * mod：crate内部由mod管理，可以理解为namespace
   * 使用use语句把其他模块中的内容引入到当前模块中
 * std：极简标准库，极少数嵌入式系统无法使用。Rust编译器对标准库有特殊处理，默认情况下编译器自动引入对标准库的依赖
-* 标准库提供了std::prelude模块，在这个模块中导入了常见的type、trait、function、macro等。编译器会为用户写的每一个crate自动插入：` use std::prelude::*; `
+* 标准库提供了std::prelude模块，在这个模块中导入了常见的type、trait、function、macro等。编译器会为用户写的每一个crate自动插入：` use std::prelude::v1::*; `。Prelude模块的源码在` src/libstd/prelude/ `文件夹下
 
 ## 1.5 Format格式详细说明
 
-* Rust中的宏都是用同样的格式，详细参考：std::fmt模块说明
+* Rust中的宏都是用同样的格式，详细参考注库文档的：std::fmt模块说明
 
 ```rust
 fn main() {
@@ -108,6 +118,8 @@ fn main() {
   println!("{:E}", 10000f32);    // 科学计数（大写）
   println!("{:?}", "test");    // 打印Debug
   println!("{:#?}", ("test1", "test2"));    // 带换行和缩进的Debug打印
-  println!("{} {} {}", a="x", b="y");   // 命名参数
+  println!("{a} {b} {b}", a="x", b="y");   // 命名参数
 }
 ```
+* Rust中还有一系列的宏，都是用同样的格式控制规则，如：format!、write!、writeln!等
+* Rust标准库中设计了宏来做标准输出，主要是为了更好地错误检查。函数不具备字符串格式化的静态检查功能，如果出现了不匹配的情况，只能是运行期错误
