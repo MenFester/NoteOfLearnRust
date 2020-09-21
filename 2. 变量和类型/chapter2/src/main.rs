@@ -31,6 +31,24 @@ struct T1 {
 
 struct T2(i32);
 
+enum Number {
+    Int(i32),
+    Float(f32),
+}
+
+fn read_num(num: &Number) {
+    match num {
+        &Number::Int(value) => println!("Integre {}", value),
+        &Number::Float(value) => println!("Float {}", value),
+    }
+}
+
+enum Animal {
+    dog = 1,
+    cat = 200,
+    tiger,
+}
+
 fn main() {
     test(true);
 
@@ -69,7 +87,7 @@ fn main() {
 
     let m: i8 = 120;
     let n: i8 = 120;
-    arithmetic(m, n); // rustc -O 后不报panic
+    // arithmetic(m, n); // rustc -O 后不报panic
 
     let i = 100_i8;
     println!("checked {:?}", i.checked_add(i));
@@ -115,4 +133,12 @@ fn main() {
     println!("{}", v1.v);
     println!("{}", v2.0);
     println!("{}", v3.0);
+
+    let n: Number = Number::Int(10);
+    read_num(&n);
+    let n: Number = Number::Float(3.14);
+    read_num(&n);
+
+    let x = Animal::tiger as isize;
+    println!("{}", x);    // 201
 }
