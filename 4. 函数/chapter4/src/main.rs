@@ -45,7 +45,7 @@ fn main() {
     println!("evaluation output {}", func(p));
     println!("evaluation output {}", add1(p));
 
-    let mut func1 = add1 as fn((i32, i32)) -> i32; // 就像把函数签名当做可以被其他函数类型的通用类型
+    let mut func1 = add1 as fn((i32, i32)) -> i32; // 就像把函数签名当中间通用类型，签名不同则中间类型不同
                                                    // 或者 let mut func1: fn(i32, i32) -> i32 = add1;
     println!("evaluation output {}", func1(p));
     func1 = add2;
@@ -63,6 +63,17 @@ fn main() {
 
     let f8 = fib(8);
     println!("{}", f8);
+
+    println!("{:?}", test_inner());
+
+    for arg in std::env::args() {
+        match std::env::var(&arg) {
+            Ok(val) => println!("{}: {:?}", &arg, val),
+            Err(e) => println!("couldn't find enviroment {}, {}", &arg, e),
+        }
+    }
+
+    println!("All enviroment variable count {}", std::env::vars().count());
 
     std::process::exit(0);
 }

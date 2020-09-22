@@ -67,4 +67,5 @@ fn main() {
     for i in array.iter() {
         println!("The number is {}", i);
     }
+
 }
