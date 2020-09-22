@@ -36,8 +36,35 @@ fn main() {
     };
     println!("{}", v);
 
+    let v = loop { break };
+    println!("{:?}", v);    // ()
+
+    let mut n = 1;
+    while n < 101 {
+        if n % 15 == 0 {
+            println!("fizzbuzz");
+        } else if n % 3 == 0 {
+            println!("fizz");
+        } else if n % 5 == 0 {
+            println!("buzz");
+        } else {
+            println!("{}", n);
+        }
+        n += 1;
+    }
+
     let array = &[1, 2, 3, 4, 5];
     for i in array {
+        println!("The number is {}", i);
+    }
+
+    let array = [1, 2, 3, 4, 5];
+    for i in &array {
+        println!("The number is {}", i);
+    }
+
+    let array = [1, 2, 3, 4, 5];
+    for i in array.iter() {
         println!("The number is {}", i);
     }
 }
