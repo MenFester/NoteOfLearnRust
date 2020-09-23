@@ -24,7 +24,7 @@ impl Shape for Circle {
     }
 }
 
-impl Circle {
+impl Circle {    // 直接对类型impl来增加成员方法，无须trait名 
     fn get_radius(&self) -> f64 {
         self.radius
     }
