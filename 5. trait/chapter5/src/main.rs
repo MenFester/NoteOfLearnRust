@@ -89,15 +89,15 @@ impl Wash for Chef {
 
 use std::fmt::Debug;
 
-fn my_print<T: Debug>(x: T) {
+fn my_print<T: Debug>(x: T) {    // 这是对泛型参数的一个约束说明
     // my_print函数引入了一个泛型参数T，所以它的参数不是一个具体类型，而是一组类型
     // 要求这个T类型实现Debug这个trait
     println!("The value is {:?}.", x);
 }
 
-fn my_print2<T>(x: T)
+fn my_print2<T>(x: T)    // 泛型约束的另一种写法
 where
-    T: Debug,
+    T: Debug
 {
     println!("The value is {:?}.", x);
 }

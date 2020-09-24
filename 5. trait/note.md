@@ -14,16 +14,16 @@
   * `self: Self`，简写为self
   * `self: &Self`，简写为&self
   * `self: &mut Self`，简写为&mut self
-  * `self: Box<Self>`.
+  * `self: Box<Self>`
 * 可以为某些类型实现（impl）这个trait
 * 针对一个类型，我们可以直接对它impl来增加成员方法，无须trait名字。可以看做是为类型impl了一个匿名trait，定义了类型的“内在方法”（inherent methods）
-* trait中可以包含方法的默认实现，具体类型实现时候就可以选择不重写
-* impl的对象甚至可以是trait
+* trait中可以包含方法的默认实现，具体类型实现时候就可以选择不重写，也可以选择重新实现来“override”默认的实现方式
+* impl的对象甚至可以是trait，例如：` impl Shape for dyn Round `（需要dyn关键字），看做为满足所有T: Round的具体类型增加一个成员方法
 
 ## 5.2 静态方法
 
 * 没有receiver的方法（第一个参数不是小写self参数，即便第一个参数类型是Self相关类型的方法）称为静态方法，用Type::FunctionName()的方式调用，不能用小数点的语法调用函数
-* trait中也可以定义静态函数
+* trait中也可以定义静态函数，无须static关键字
 * Rust中没有“构造函数”的概念，Default trait实际上可以看做一个针对无参数构造函数的统一抽象
 
 ## 5.3 扩展方法
@@ -45,12 +45,28 @@
 
 * Rust的trait的另外一个大用处是，作为泛型约束使用
 * 泛型约束既是对实现部分的约束，也是对调用部分的约束
-* trait允许继承，满足Derived的类型，必然也满足Base trait。所以，我们在针对一个具体类型impl Derived的时候，编译器也会要求我们同时impl Base
+* 泛型约束还有一种用where子句的表达方式。某些复杂的情况下（例如涉及关联类型的时候），只有where子句可以表达
+* trait允许继承，例如 ：` trait Derived : Base { } `。满足Derived的类型，必然也满足Base trait。所以，我们在针对一个具体类型impl Derived的时候，编译器也会要求我们同时impl Base
 * 在编译器的眼中，trait Derived：Base{}等同于trait Derived where Self：Base{}
 
 ## 5.6 Derive
 
-* Rust里面为类型impl某些trait的时候，逻辑是非常机械化的。为许多类型重复而单调地impl某些trait，是非常枯燥的事情。为此，Rust提供了一个特殊的attribute，它可以帮我们自动impl某些trait。它的语法是，在你希望impl trait的类型前面写` #[derive(...)]`，括号里面是你希望impl的trait的名字。这样写了之后， 编译器就帮你自动加上了impl块
+* Rust里面为类型impl某些trait的时候，逻辑是非常机械化的。为许多类型重复而单调地impl某些trait，是非常枯燥的事情。为此，Rust提供了一个特殊的attribute，它可以帮我们自动impl某些trait。它的语法是，在你希望impl trait的类型前面写` #[derive(...)]`，括号里面是你希望impl的用逗号隔开的trait的名字。这样写了之后， 编译器就帮你自动加上了impl块
+* Rust支持的可以自动derive的trait包括：
+  * Debug
+  * Clone
+  * Copy
+  * Hash
+  * RustcEncodable
+  * RustcDecodable
+  * PartialEq
+  * Eq
+  * PartialOrd
+  * Ord
+  * Default
+  * FromPrimitive
+  * Send
+  * Sync
 
 ## 5.7 trait别名
 
